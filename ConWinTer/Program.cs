@@ -1,4 +1,5 @@
 ﻿using ConWinTer.Loader;
+using ConWinTer.Utils;
 using System;
 using System.CommandLine;
 using System.CommandLine.Invocation;
@@ -21,9 +22,7 @@ namespace ConWinTer {
             }
             
             if (string.IsNullOrEmpty(output)) {
-                var dirName = Path.GetDirectoryName(input);
-                var fileName = Path.GetFileNameWithoutExtension(input) + (outputFormat.StartsWith('.') ? "" : ".") + outputFormat;
-                output = Path.Combine(dirName, fileName);
+                output = PathUtils.ChangeExtesion(input, outputFormat);
             } else if (!Directory.Exists(Path.GetDirectoryName(output))) {
                 Console.Error.WriteLine($"Directory in path '{Path.GetDirectoryName(output)}' doesn't exist.");
                 return;
