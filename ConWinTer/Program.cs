@@ -4,6 +4,7 @@ using System;
 using System.CommandLine;
 using System.CommandLine.Invocation;
 using System.CommandLine.Parsing;
+using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 
@@ -28,9 +29,18 @@ namespace ConWinTer {
                 return;
             }
 
-            var loader = new BasicImageLoader();
+            var compositeLoader = new CompositeImageLoader();
 
-            var image = loader.FromFile(input);
+            compositeLoader.RegisterLoader(new BasicImageLoader());
+            compositeLoader.RegisterLoader(new SvgImageLoader());
+
+            if (!compositeLoader.IsSupportedFile(input)) {
+                Console.Error.WriteLine($"File '{input}' is not supported.");
+                Console.Error.WriteLine($"Supported extensions: {string.Join(", ", compositeLoader.GetSupportedExtensions())}");
+                return;
+            }
+
+            var image = compositeLoader.FromFile(input);
 
             image.Save(output);
         }

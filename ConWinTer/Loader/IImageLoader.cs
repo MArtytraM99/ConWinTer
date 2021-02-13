@@ -2,10 +2,13 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Drawing;
-using System.IO;
 
 namespace ConWinTer.Loader {
     public interface IImageLoader {
-        Image FromFile(string path);
+        public abstract Image FromFile(string path);
+
+        public bool IsSupportedFile(string path);
+
+        public IEnumerable<string> GetSupportedExtensions();
     }
 }
