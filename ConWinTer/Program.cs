@@ -32,7 +32,6 @@ namespace ConWinTer {
 
             var image = loader.FromFile(input);
 
-            Console.WriteLine($"Saving to: {output}");
             image.Save(output);
         }
 
