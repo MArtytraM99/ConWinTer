@@ -22,7 +22,7 @@ namespace ConWinTer {
             }
             
             if (string.IsNullOrEmpty(output)) {
-                output = PathUtils.ChangeExtesion(input, outputFormat);
+                output = Path.ChangeExtension(input, outputFormat);
             } else if (!Directory.Exists(Path.GetDirectoryName(output))) {
                 Console.Error.WriteLine($"Directory in path '{Path.GetDirectoryName(output)}' doesn't exist.");
                 return;
@@ -50,7 +50,7 @@ namespace ConWinTer {
             );
 
             var outputFormatOpt = new Option<string>(
-                new string[] { "--output-format", "-of"},
+                new string[] { "--output-format", "-f" },
                 "Format in which converted image should be saved. If left empty it will be deduced from output path."
             );
 
