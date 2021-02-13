@@ -32,35 +32,5 @@ namespace ConWinTer.UnitTests {
 
             Assert.Equal(expectedPath, combinedPath);
         }
-
-        public static IEnumerable<object[]> GetPathsToChangeExtension() {
-            yield return new object[] { @"C:\file.txt", "png", @"C:\file.png" };
-
-            yield return new object[] { @"C:\file", "png", @"C:\file.png" };
-
-            yield return new object[] { @"C:\file.txt", ".png", @"C:\file.png" };
-
-            yield return new object[] { @"C:\file", ".png", @"C:\file.png" };
-
-            yield return new object[] { "/etc/file.txt", "png", @"\etc\file.png" };
-
-            yield return new object[] { "file.txt", "png", "file.png" };
-
-            yield return new object[] { "./file.txt", "png", @".\file.png" };
-
-            yield return new object[] { "./file", "png", @".\file.png" };
-
-            yield return new object[] { @"..\..\dir\file.txt", "png", @"..\..\dir\file.png" };
-
-            yield return new object[] { @"..\..\dir\file", "png", @"..\..\dir\file.png" };
-        }
-
-        [Theory]
-        [MemberData(nameof(GetPathsToChangeExtension))]
-        public void ChangeExtension_CorrectOutput(string filepath, string extension, string expectedPath) {
-            var resultPath = PathUtils.ChangeExtesion(filepath, extension);
-
-            Assert.Equal(expectedPath, resultPath);
-        }
     }
 }

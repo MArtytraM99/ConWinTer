@@ -12,11 +12,5 @@ namespace ConWinTer.Utils {
             var filenameWithNewExtension = filenameWithoutExtension + "." + trimmedExtension;
             return Path.Combine(path, fileDirectory, filenameWithNewExtension);
         }
-
-        public static string ChangeExtesion(string path, string extension) {
-            var directory = Path.GetDirectoryName(path);
-            var filename = Path.GetFileName(path);
-            return CombineUsingExtension(directory, filename, extension);
-        }
     }
 }
