@@ -33,6 +33,7 @@ namespace ConWinTer {
 
             compositeLoader.RegisterLoader(new BasicImageLoader());
             compositeLoader.RegisterLoader(new SvgImageLoader());
+            compositeLoader.RegisterLoader(new NetpbmImageLoader());
 
             if (!compositeLoader.IsSupportedFile(input)) {
                 Console.Error.WriteLine($"File '{input}' is not supported.");
