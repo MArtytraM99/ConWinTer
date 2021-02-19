@@ -20,7 +20,7 @@ namespace ConWinTer.Loader {
         }
 
         public IEnumerable<string> GetSupportedExtensions() {
-            return new List<string> { ".png", ".jpg" };
+            return new List<string> { ".png", ".jpg", ".bmp", ".gif", ".dib", ".tif", ".tiff", ".ico" };
         }
     }
 }
