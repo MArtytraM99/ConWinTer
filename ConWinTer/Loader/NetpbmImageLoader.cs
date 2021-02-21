@@ -31,8 +31,11 @@ namespace ConWinTer.Loader {
         private string ReadLine(BinaryReader reader) {
             var sb = new StringBuilder();
             char c;
-            while ((c = reader.ReadChar()) != '\n')
+            while ((c = reader.ReadChar()) != '\n') {
                 sb.Append(c);
+                if (reader.BaseStream.Position == reader.BaseStream.Length)
+                    return sb.ToString();
+            }
 
             sb.Append(c);
             return sb.ToString();
