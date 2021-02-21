@@ -7,26 +7,27 @@ using System.CommandLine.Parsing;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace ConWinTer {
     class Program {
-        static void Main(string[] args) {
+        static async Task<int> Main(string[] args) {
             var rootCommand = ConfigureCommandLineOptions();
 
-            rootCommand.InvokeAsync(args);
+            return await rootCommand.InvokeAsync(args);
         }
 
-        static void Run(string input, string output, string outputFormat) {
+        static int Run(string input, string output, string outputFormat) {
             if (!File.Exists(input)) {
                 Console.Error.WriteLine($"Input file in path '{input}' doesn't exist.");
-                return;
+                return 1;
             }
             
             if (string.IsNullOrEmpty(output)) {
                 output = Path.ChangeExtension(input, outputFormat);
             } else if (!Directory.Exists(Path.GetDirectoryName(output))) {
                 Console.Error.WriteLine($"Directory in path '{Path.GetDirectoryName(output)}' doesn't exist.");
-                return;
+                return 1;
             }
 
             var compositeLoader = new CompositeImageLoader();
@@ -38,12 +39,13 @@ namespace ConWinTer {
             if (!compositeLoader.IsSupportedFile(input)) {
                 Console.Error.WriteLine($"File '{input}' is not supported.");
                 Console.Error.WriteLine($"Supported extensions: {string.Join(", ", compositeLoader.GetSupportedExtensions())}");
-                return;
+                return 1;
             }
 
             var image = compositeLoader.FromFile(input);
 
             image.Save(output);
+            return 0;
         }
 
         private static RootCommand ConfigureCommandLineOptions() {
