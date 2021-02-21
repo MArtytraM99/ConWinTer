@@ -8,7 +8,6 @@ using System.Text;
 
 namespace ConWinTer.Loader {
     public class NetpbmImageLoader : IImageLoader {
-        private readonly string[] whitespaces = new string[] { " ", "\t", "\n", "\r" };
         public Image FromFile(string path) {
             var reader = new BinaryReader(File.OpenRead(path));
             var type = string.Join("", reader.ReadChars(2));
