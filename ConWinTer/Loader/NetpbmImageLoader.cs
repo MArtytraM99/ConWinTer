@@ -41,8 +41,11 @@ namespace ConWinTer.Loader {
             return sb.ToString();
         }
 
-        private bool ReadNumber(BinaryReader reader, out int result, int maxLength = -1) {
-            // first remove whitespaces and line comments
+        /// <summary>
+        /// Eats all whitespaces and comments in <paramref name="reader"/> at current position
+        /// </summary>
+        /// <param name="reader"></param>
+        private void EraseWhitespaceComments(BinaryReader reader) {
             bool shouldTest = true;
             while (shouldTest) {
                 bool isWhitespace = string.IsNullOrWhiteSpace((char)reader.PeekChar() + "");
@@ -54,6 +57,10 @@ namespace ConWinTer.Loader {
                 else if (isComment)
                     ReadLine(reader);
             }
+        }
+
+        private bool ReadNumber(BinaryReader reader, out int result, int maxLength = -1) {
+            EraseWhitespaceComments(reader);
 
             string digits = "";
             while (true) {
@@ -71,8 +78,7 @@ namespace ConWinTer.Loader {
                 reader.ReadChar();
             }
 
-            while (string.IsNullOrWhiteSpace((char)reader.PeekChar() + ""))
-                reader.ReadChar();
+            EraseWhitespaceComments(reader);
 
             return int.TryParse(digits, out result);
         }
