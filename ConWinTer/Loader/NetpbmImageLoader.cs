@@ -85,24 +85,22 @@ namespace ConWinTer.Loader {
 
         private Bitmap LoadPBM(int width, int height, BinaryReader reader, bool isBinary) {
             Bitmap bitmap = new Bitmap(width, height);
-            bool[] pixelData;
+            bool[] pixelData = new bool[width * height];
             if (isBinary) {
                 int byteCount = (width * height - 1) / 8 + 1;
                 byte[] rawData = new byte[byteCount];
-                if(reader.Read(rawData, 0, byteCount) != byteCount) {
-                    throw new FormatException($"Expecting {byteCount} bytes of pixels");
-                }
-                pixelData = new bool[width * height];
-                for(int i = 0; i < width*height; i++) {
+                if(reader.Read(rawData, 0, byteCount) != byteCount)
+                    throw new FormatException($"Expected {byteCount} bytes of pixels");
+
+                for(int i = 0; i < pixelData.Length; i++) {
                     int byteIndex = i / 8;
                     int bitIndex = 7 - (i % 8); // 7 = LSB, 0 = MSB
                     pixelData[i] = (rawData[byteIndex] & (1 << bitIndex)) > 0;
                 }
             } else {
-                pixelData = new bool[width * height];
                 for(int i = 0; i < pixelData.Length; i++) {
                     if (!ReadNumber(reader, out int pixel, 1))
-                        throw new FormatException($"Expecting {pixelData.Length} pixels as 0/1 but found only {i}");
+                        throw new FormatException($"Expected {pixelData.Length} pixels as 0/1 but found only {i}");
                     pixelData[i] = pixel == 1;
                 }
             }
@@ -114,11 +112,75 @@ namespace ConWinTer.Loader {
         }
 
         private Bitmap LoadPGM(int width, int height, BinaryReader reader, bool isBinary) {
-            throw new NotImplementedException();
+            if (!ReadNumber(reader, out int maxValue))
+                throw new FormatException("Expected max pixel value number in PGM format");
+            if (maxValue > 255)
+                throw new ArgumentException("Only one byte pixel values are supported. Max pixel value cannot be bigger than 255.");
+            if (maxValue <= 0)
+                throw new ArgumentException("Max pixel value must be a positive integer");
+
+            Bitmap bitmap = new Bitmap(width, height);
+            int[] pixelData = new int[width * height];
+
+            if (isBinary) {
+                byte[] rawData = new byte[pixelData.Length];
+                if (reader.Read(rawData, 0, rawData.Length) != rawData.Length)
+                    throw new FormatException($"Expected {rawData.Length} bytes of pixels");
+
+                for (int i = 0; i < pixelData.Length; i++)
+                    pixelData[i] = rawData[i];
+            } else {
+                for (int i = 0; i < pixelData.Length; i++) {
+                    if (!ReadNumber(reader, out int pixel))
+                        throw new FormatException($"Expected {pixelData.Length} pixels as numbers but found only {i}");
+                    pixelData[i] = pixel;
+                }
+            }
+
+            for (int y = 0; y < height; y++) {
+                for (int x = 0; x < width; x++) {
+                    int grayscale = 255 * pixelData[y * width + x] / maxValue;
+                    bitmap.SetPixel(x, y, Color.FromArgb(grayscale, grayscale, grayscale));
+                }
+            }
+
+            return bitmap;
         }
 
         private Bitmap LoadPPM(int width, int height, BinaryReader reader, bool isBinary) {
-            throw new NotImplementedException();
+            if (!ReadNumber(reader, out int maxValue))
+                throw new FormatException("Expected max pixel value number in PPM format");
+            if (maxValue > 255)
+                throw new ArgumentException("Only one byte pixel values are supported. Max pixel value cannot be bigger than 255.");
+            if (maxValue <= 0)
+                throw new ArgumentException("Max pixel value must be a positive integer");
+
+            Bitmap bitmap = new Bitmap(width, height);
+            Color[] pixelData = new Color[width * height];
+
+            if (isBinary) {
+                byte[] rawData = new byte[pixelData.Length * 3];
+                if (reader.Read(rawData, 0, rawData.Length) != rawData.Length)
+                    throw new FormatException($"Expected {rawData.Length} bytes of pixels");
+
+                for (int i = 0; i < pixelData.Length; i++)
+                    pixelData[i] = Color.FromArgb(255 * rawData[3 * i + 0] / maxValue, 255 * rawData[3 * i + 1] / maxValue, 255 * rawData[3 * i + 2] / maxValue);
+            } else {
+                for (int i = 0; i < pixelData.Length; i++) {
+                    if (!ReadNumber(reader, out int r))
+                        throw new FormatException($"Expected {pixelData.Length} pixels as 3 numbers but found only {i}");
+                    if (!ReadNumber(reader, out int g))
+                        throw new FormatException($"Expected {pixelData.Length} pixels as 3 numbers but found only {i}");
+                    if (!ReadNumber(reader, out int b))
+                        throw new FormatException($"Expected {pixelData.Length} pixels as 3 numbers but found only {i}");
+                    pixelData[i] = Color.FromArgb(255 * r / maxValue, 255 * g / maxValue, 255 * b / maxValue);
+                }
+            }
+
+            for (int y = 0; y < height; y++)
+                for (int x = 0; x < width; x++)
+                    bitmap.SetPixel(x, y, pixelData[y * width + x]);
+            return bitmap;
         }
 
         public bool IsSupportedFile(string path) {
