@@ -23,19 +23,27 @@ __Output__: ___.png___, ___.jpg___, _.bmp_, _.gif_, _.dib_, _.tif_, _.tiff_
 ### Examples
 
 __Example 1:__
+
 `ConWinTer.exe --input C:\Images\image.jpg --output C:\Documents\converted.png`
+
 Converts image located at `C:\Images\image.jpg` to png and saves it to `C:\Documents\converted.png`.
 
 __Example 2:__
+
 `ConWinTer.exe -i C:\Images\image.jpg -o C:\Documents\converted.png`
+
 Does same operation as __Example 1__ but it uses shorter notation.
 
 __Example 3:__
+
 `ConWinTer.exe --input C:\Images\image.jpg --output-format png`
+
 Converts image located at `C:\Images\image.jpg` to png and saves it to same directory as source image (`C:\Images\image.png`).
 
 __Example 4:__
+
 `ConWinTer.exe -i C:\Images\image.jpg -f png`
+
 Does same operation as __Example 3__ but it uses shorter notation.
 
 ## Explorer context menu
