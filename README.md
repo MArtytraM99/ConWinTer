@@ -27,7 +27,7 @@ __Example 4:__
 `ConWinTer.exe -i C:\Images\image.jpg -f png`
 Does same operation as __Example 3__ but it uses shorter notation.
 ## Explorer context menu
-![Context menu in File Explorer](context-menu.jpg)
+![Context menu in File Explorer](context_menu.jpg)
 For faster and easier use via the File Explorer Context Menu (right-click menu) this repo contains `context_menu.reg` file. 
 __This feature is Windows only and was tested on a Windows 10 machine.__
 ### Setup
