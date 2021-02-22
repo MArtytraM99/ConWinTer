@@ -1,4 +1,6 @@
-﻿using ConWinTer.Loader;
+﻿using ConWinTer.Export;
+using ConWinTer.Loader;
+using ConWinTer.Pipeline;
 using ConWinTer.Utils;
 using System;
 using System.CommandLine;
@@ -7,45 +9,40 @@ using System.CommandLine.Parsing;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace ConWinTer {
     class Program {
+        private static ImagePipeline imagePipeline;
         static async Task<int> Main(string[] args) {
+            Configure();
             var rootCommand = ConfigureCommandLineOptions();
 
             return await rootCommand.InvokeAsync(args);
         }
 
         static int Run(string input, string output, string outputFormat) {
-            if (!File.Exists(input)) {
-                Console.Error.WriteLine($"Input file in path '{input}' doesn't exist.");
-                return 1;
-            }
-            
-            if (string.IsNullOrEmpty(output)) {
-                output = Path.ChangeExtension(input, outputFormat);
-            } else if (!Directory.Exists(Path.GetDirectoryName(output))) {
-                Console.Error.WriteLine($"Directory in path '{Path.GetDirectoryName(output)}' doesn't exist.");
+            try {
+                imagePipeline.Run(input, output, outputFormat);
+            } catch (Exception e) {
+                Console.Error.WriteLine(e.Message);
                 return 1;
             }
 
+            return 0;
+        }
+
+        private static void Configure() {
             var compositeLoader = new CompositeImageLoader();
 
             compositeLoader.RegisterLoader(new BasicImageLoader());
             compositeLoader.RegisterLoader(new SvgImageLoader());
             compositeLoader.RegisterLoader(new NetpbmImageLoader());
 
-            if (!compositeLoader.IsSupportedFile(input)) {
-                Console.Error.WriteLine($"File '{input}' is not supported.");
-                Console.Error.WriteLine($"Supported extensions: {string.Join(", ", compositeLoader.GetSupportedExtensions())}");
-                return 1;
-            }
+            var exporter = new BasicImageExporter();
 
-            var image = compositeLoader.FromFile(input);
-
-            image.Save(output);
-            return 0;
+            imagePipeline = new ImagePipeline(compositeLoader, exporter);
         }
 
         private static RootCommand ConfigureCommandLineOptions() {
