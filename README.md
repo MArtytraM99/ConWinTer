@@ -58,3 +58,12 @@ __This feature is Windows only and was tested on a Windows 10 machine.__
  * Run (simply by double-clicking) `context_menu.reg` file. This will ask for admin privileges and add file associations to registry.
 
 If you setup everything correctly then all files ending with an extension that is supported as input will show menu for converting on right-click.
+
+## License
+Licensed under the MS-PL license.
+
+This project has dependencies on other open-source projects. These projects are referenced via NuGet packages and might be subject to different licenses.
+
+|Project|Author|Sources|License|
+|-------|------|-------|-------|
+|SVG.NET|svg-net|[GitHub](https://github.com/svg-net/SVG)|[MS-PL](https://github.com/svg-net/SVG/blob/master/license.txt)|
