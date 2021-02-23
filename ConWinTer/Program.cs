@@ -40,9 +40,12 @@ namespace ConWinTer {
             compositeLoader.RegisterLoader(new SvgImageLoader());
             compositeLoader.RegisterLoader(new NetpbmImageLoader());
 
-            var exporter = new BasicImageExporter();
+            var compositeExporter = new CompositeImageExporter();
 
-            imagePipeline = new ImagePipeline(compositeLoader, exporter);
+            compositeExporter.RegisterExporter(new BasicImageExporter());
+            compositeExporter.RegisterExporter(new IconImageExporter());
+
+            imagePipeline = new ImagePipeline(compositeLoader, compositeExporter);
         }
 
         private static RootCommand ConfigureCommandLineOptions() {
