@@ -16,9 +16,9 @@ ConWinTer supports a few options for specifying input and output. Run `ConWinTer
 ### Supported extensions
 Different extensions are supported as input and output
 
-__Input__: ___.png___, ___.jpg___, _.bmp_, _.gif_, _.dib_, _.tif_, _.tiff_, __.ico__, __.svg__, _.ppm_, _.pgm_, _.pbm_
+__Input__: ___.png___, ___.jpg___, _.bmp_, _.gif_, _.dib_, _.tif_, _.tiff_, ___.ico___, ___.svg___, _.ppm_, _.pgm_, _.pbm_
 
-__Output__: ___.png___, ___.jpg___, _.bmp_, _.gif_, _.dib_, _.tif_, _.tiff_
+__Output__: ___.png___, ___.jpg___, _.bmp_, _.gif_, _.dib_, _.tif_, _.tiff_, ___.ico___
 
 ### Examples
 
