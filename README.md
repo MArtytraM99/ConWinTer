@@ -67,3 +67,4 @@ This project has dependencies on other open-source projects. These projects are 
 |Project|Author|Sources|License|
 |-------|------|-------|-------|
 |SVG.NET|svg-net|[GitHub](https://github.com/svg-net/SVG)|[MS-PL](https://github.com/svg-net/SVG/blob/master/license.txt)|
+|command-line-api|dotnet|[GitHub](https://github.com/dotnet/command-line-api)|[MIT](https://github.com/dotnet/command-line-api/blob/main/LICENSE.md)|
