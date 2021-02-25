@@ -15,6 +15,7 @@ using System.Threading.Tasks;
 namespace ConWinTer {
     class Program {
         private static ImagePipeline imagePipeline;
+        private static ExcelPipeline excelPipeline;
         static async Task<int> Main(string[] args) {
             Configure();
             var rootCommand = ConfigureCommandLineOptions();
@@ -35,6 +36,8 @@ namespace ConWinTer {
             compositeExporter.RegisterExporter(new IconImageExporter());
 
             imagePipeline = new ImagePipeline(compositeLoader, compositeExporter);
+
+            excelPipeline = new ExcelPipeline(new ClosedXMLExcelLoader(), new CsvTableExporter());
         }
 
         private static RootCommand ConfigureCommandLineOptions() {
@@ -60,11 +63,17 @@ namespace ConWinTer {
             imageCommand.AddOption(inputPathOpt);
             imageCommand.AddOption(outputPathOpt);
             imageCommand.AddOption(outputFormatOpt);
-
             imageCommand.Handler = CommandHandler.Create<string, string, string>(imagePipeline.RunWithExceptionHandling);
+
+            var excelCommand = new Command("excel", "Command for converting excel files");
+            excelCommand.AddOption(inputPathOpt);
+            excelCommand.AddOption(outputPathOpt);
+            excelCommand.AddOption(outputFormatOpt);
+            excelCommand.Handler = CommandHandler.Create<string, string, string>(excelPipeline.RunWithExceptionHandling);
 
             rootCommand.TreatUnmatchedTokensAsErrors = true;
             rootCommand.AddCommand(imageCommand);
+            rootCommand.AddCommand(excelCommand);
 
             return rootCommand;
         }
