@@ -37,7 +37,7 @@ namespace ConWinTer {
 
             imagePipeline = new ImagePipeline(compositeLoader, compositeExporter);
 
-            excelPipeline = new ExcelPipeline(new ClosedXMLExcelLoader(), new CsvTableExporter());
+            excelPipeline = new ExcelPipeline(new ClosedXMLExcelLoader(), new ExtensionBasedSeparatorCsvExporter());
         }
 
         private static RootCommand ConfigureCommandLineOptions() {

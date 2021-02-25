@@ -7,10 +7,10 @@ using System.Text;
 
 namespace ConWinTer.Export {
     public class CsvTableExporter : ITableExporter {
-        private readonly string separator;
+        public string Separator { get; set; }
 
         public CsvTableExporter(string separator = ",") {
-            this.separator = separator;
+            Separator = separator;
         }
 
         public void Export(Table table, string path) {
@@ -19,7 +19,7 @@ namespace ConWinTer.Export {
 
             var writer = new StreamWriter(File.OpenWrite(path));
             foreach (var row in table.AsRowsArray)
-                writer.WriteLine(string.Join(separator, row));
+                writer.WriteLine(string.Join(Separator, row));
             
             writer.Flush();
             writer.Close();
