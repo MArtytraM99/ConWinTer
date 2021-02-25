@@ -1,5 +1,5 @@
 # ConWinTer
-Console Windows Converter (or ConWinTer for short) is a commandline application for converting files from one format to another. Main focus is on image files but other types will be considered. ConWinTer is capable of converting __svg__ file to png and other.
+Console Windows Converter (or ConWinTer for short) is a commandline application for converting files from one format to another. Main focus is on image files but it can convert xlsx (Excel) files to plain csv. ConWinTer is capable of converting __svg__ file to png and other.
 
 This repo also provides a .reg file that adds support for converting files just by right-clicking a file and selecting output format. For more information see [Explorer context menu](#explorer-context-menu) section.
 
@@ -12,39 +12,60 @@ ConWinTer supports a few options for specifying input and output. Run `ConWinTer
  1. `-i`, `--input` `<path>` is a __required__ option taking one argument. Argument is a path to image that should be converted. Image format is deduced from path extension (supported extensions are listed below).
  2. `-o`, `--output` `<path>` is a non-mandatory option taking one argument. Argument is a target path for image output. When `-f` or `--output-format` is not specified then image format is deduced from path extension. If this option is omitted then target path is same as input path with extension specified by `--output-format`.
  3. `-f`, `--output-format` `<format>` is a non-mandatory option taking one argument. Argument is a format that should be used as an output (supported formats/extensions are listed below).
+ 
+### Excel options
+ _Basicly same as [Image options](#image-options)_
 
 ### Supported extensions
 Different extensions are supported as input and output
 
-__Input__: ___.png___, ___.jpg___, _.bmp_, _.gif_, _.dib_, _.tif_, _.tiff_, ___.ico___, ___.svg___, _.ppm_, _.pgm_, _.pbm_
+#### Images
+__Input:__ ___.png___, ___.jpg___, _.bmp_, _.gif_, _.dib_, _.tif_, _.tiff_, ___.ico___, ___.svg___, _.ppm_, _.pgm_, _.pbm_
 
-__Output__: ___.png___, ___.jpg___, _.bmp_, _.gif_, _.dib_, _.tif_, _.tiff_, ___.ico___
+__Output:__ ___.png___, ___.jpg___, _.bmp_, _.gif_, _.dib_, _.tif_, _.tiff_, ___.ico___
+
+#### Excel
+__Input:__ _.xlsx_
+
+__Output:__ _.csv_ (different separators are supported, use `csv;` as output format to use semicolon as separator or `csvt` to use tab)
 
 ### Examples
 
 __Example 1:__
 
-`ConWinTer.exe --input C:\Images\image.jpg --output C:\Documents\converted.png`
+`ConWinTer.exe image --input C:\Images\image.jpg --output C:\Documents\converted.png`
 
 Converts image located at `C:\Images\image.jpg` to png and saves it to `C:\Documents\converted.png`.
 
 __Example 2:__
 
-`ConWinTer.exe -i C:\Images\image.jpg -o C:\Documents\converted.png`
+`ConWinTer.exe image -i C:\Images\image.jpg -o C:\Documents\converted.png`
 
 Does same operation as __Example 1__ but it uses shorter notation.
 
 __Example 3:__
 
-`ConWinTer.exe --input C:\Images\image.jpg --output-format png`
+`ConWinTer.exe image --input C:\Images\image.jpg --output-format png`
 
 Converts image located at `C:\Images\image.jpg` to png and saves it to same directory as source image (`C:\Images\image.png`).
 
 __Example 4:__
 
-`ConWinTer.exe -i C:\Images\image.jpg -f png`
+`ConWinTer.exe image -i C:\Images\image.jpg -f png`
 
 Does same operation as __Example 3__ but it uses shorter notation.
+
+__Example 5:__
+
+`ConWinTer.exe excel --input C:\Documents\excel_file.xlsx --output C:\Documents\output.csv`
+
+Converts Excel file at `C:\Documents\excel_file.xlsx` to csv(s) - one for each worksheet - and saves it to `C:\Documents\output_<sheet name>.csv` where `<sheet name>` will be replaced by actual name of corresponding sheet.
+
+__Example 6:__
+
+`ConWinTer.exe excel -i C:\Documents\excel_file.xlsx -f csv;`
+
+Converts Excel file at `C:\Documents\excel_file.xlsx` to csv(s) using semicolon as separator.
 
 ## Explorer context menu
 ![Context menu in File Explorer](context_menu.jpg)
@@ -68,3 +89,4 @@ This project has dependencies on other open-source projects. These projects are 
 |-------|------|-------|-------|
 |SVG.NET|svg-net|[GitHub](https://github.com/svg-net/SVG)|[MS-PL](https://github.com/svg-net/SVG/blob/master/license.txt)|
 |command-line-api|dotnet|[GitHub](https://github.com/dotnet/command-line-api)|[MIT](https://github.com/dotnet/command-line-api/blob/main/LICENSE.md)|
+|ClosedXML|ClosedXML|[GitHub](https://github.com/ClosedXML/ClosedXML)|[MIT](https://github.com/ClosedXML/ClosedXML/blob/develop/LICENSE)|
