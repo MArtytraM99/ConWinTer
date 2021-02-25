@@ -43,5 +43,15 @@ namespace ConWinTer.Pipeline {
                 return Path.ChangeExtension(output, outputFormat);
             return output;
         }
+
+        public int RunWithExceptionHandling(string input, string output, string outputFormat) {
+            try {
+                Run(input, output, outputFormat);
+                return 0;
+            } catch (Exception e) {
+                Console.Error.WriteLine(e.Message);
+                return 1;
+            }
+        }
     }
 }

@@ -22,17 +22,6 @@ namespace ConWinTer {
             return await rootCommand.InvokeAsync(args);
         }
 
-        static int Run(string input, string output, string outputFormat) {
-            try {
-                imagePipeline.Run(input, output, outputFormat);
-            } catch (Exception e) {
-                Console.Error.WriteLine(e.Message);
-                return 1;
-            }
-
-            return 0;
-        }
-
         private static void Configure() {
             var compositeLoader = new CompositeImageLoader();
 
@@ -49,29 +38,33 @@ namespace ConWinTer {
         }
 
         private static RootCommand ConfigureCommandLineOptions() {
-            var rootCommand = new RootCommand("Converts an image from one format to another");
+            var rootCommand = new RootCommand("Converts files from one format to another");
 
             var inputPathOpt = new Option<string>(
                 new string[] { "--input", "-i" },
-                "Path to image that should be converted"
+                "Path to file that should be converted"
             );
             inputPathOpt.IsRequired = true;
 
             var outputPathOpt = new Option<string>(
                 new string[] { "--output", "-o" },
-                "Path where conveted image should be saved. If left empty same path as input will be taken."
+                "Path where conveted file should be saved. If left empty same path as input will be taken."
             );
 
             var outputFormatOpt = new Option<string>(
                 new string[] { "--output-format", "-f" },
-                "Format in which converted image should be saved. If left empty it will be deduced from output path."
+                "Format in which converted file should be saved. If left empty it will be deduced from output path."
             );
 
-            rootCommand.AddOption(inputPathOpt);
-            rootCommand.AddOption(outputPathOpt);
-            rootCommand.AddOption(outputFormatOpt);
+            var imageCommand = new Command("image", "Command for converting images");
+            imageCommand.AddOption(inputPathOpt);
+            imageCommand.AddOption(outputPathOpt);
+            imageCommand.AddOption(outputFormatOpt);
+
+            imageCommand.Handler = CommandHandler.Create<string, string, string>(imagePipeline.RunWithExceptionHandling);
+
             rootCommand.TreatUnmatchedTokensAsErrors = true;
-            rootCommand.Handler = CommandHandler.Create<string, string, string>(Run);
+            rootCommand.AddCommand(imageCommand);
 
             return rootCommand;
         }
