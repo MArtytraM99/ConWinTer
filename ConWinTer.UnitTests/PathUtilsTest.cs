@@ -32,5 +32,21 @@ namespace ConWinTer.UnitTests {
 
             Assert.Equal(expectedPath, combinedPath);
         }
+
+        public static IEnumerable<object[]> GetPathsToAppendToFilename() {
+            yield return new object[] { "file.txt", "_appended", "file_appended.txt" };
+
+            yield return new object[] { "file.png.txt", "_appended", "file.png_appended.txt" };
+
+            yield return new object[] { @"C:\dir\file.txt", "_appended", @"C:\dir\file_appended.txt" };
+        }
+
+        [Theory]
+        [MemberData(nameof(GetPathsToAppendToFilename))]
+        public void AppendToFilename_CorrectOutput(string path, string stringToAppend, string expectedPath) {
+            var appended = PathUtils.AppendToFilename(path, stringToAppend);
+
+            Assert.Equal(expectedPath, appended);
+        }
     }
 }
