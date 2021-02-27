@@ -14,7 +14,7 @@ namespace ConWinTer.Model {
                 for (int i = 0; i < data.GetLength(0); i++) {
                     rows[i] = new string[data.GetLength(1)];
                     for (int j = 0; j < data.GetLength(1); j++)
-                        rows[i][j] = (string)data[i, j].Clone();
+                        rows[i][j] = data[i, j] == null ? "" : (string)data[i, j].Clone();
                 }
 
                 return rows;
@@ -26,7 +26,7 @@ namespace ConWinTer.Model {
                 for (int i = 0; i < data.GetLength(1); i++) {
                     cols[i] = new string[data.GetLength(0)];
                     for (int j = 0; j < data.GetLength(0); j++)
-                        cols[i][j] = (string)data[j, i].Clone();
+                        cols[i][j] = data[j, i] == null ? "" : (string)data[j, i].Clone();
                 }
                     
                 return cols;
