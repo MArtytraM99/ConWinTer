@@ -95,6 +95,16 @@ Windows Registry Editor Version 5.00
 ; register global association extended - only with shift right-click
 
 [HKEY_CLASSES_ROOT\*\shell\conwinter]
-"MUIVerb"="Convert to..."
-"ExtendedSubCommandsKey"="\\ConWinTer\\ContextMenu\\ImageConv"
+"MUIVerb"="Convert..."
+"Subcommands"=""
 "Extended"=""
+
+[HKEY_CLASSES_ROOT\*\shell\conwinter\shell]
+
+[HKEY_CLASSES_ROOT\*\shell\conwinter\shell\Image]
+"MUIVerb"="as image to..."
+"ExtendedSubCommandsKey"="\\ConWinTer\\ContextMenu\\ImageConv"
+
+[HKEY_CLASSES_ROOT\*\shell\conwinter\shell\Excel]
+"MUIVerb"="as excel to..."
+"ExtendedSubCommandsKey"="\\ConWinTer\\ContextMenu\\ExcelConv"
