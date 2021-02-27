@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ConWinTer.Utils;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
@@ -183,8 +184,7 @@ namespace ConWinTer.Loader {
         }
 
         public bool IsSupportedFile(string path) {
-            var extension = Path.GetExtension(path);
-            return GetSupportedExtensions().Contains(extension);
+            return PathUtils.HasExtension(path, GetSupportedExtensions());
         }
 
         public IEnumerable<string> GetSupportedExtensions() {

@@ -48,5 +48,45 @@ namespace ConWinTer.UnitTests {
 
             Assert.Equal(expectedPath, appended);
         }
+
+        public static IEnumerable<object[]> GetPathsToTestHasExtension() {
+            yield return new object[] { "file.txt", new List<string> { "txt" }, true };
+
+            yield return new object[] { "file.txt", new List<string> { ".txt" }, true };
+
+            yield return new object[] { "file.txt", new List<string> { "TXT" }, true };
+
+            yield return new object[] { "file.TXT", new List<string> { "txt" }, true };
+
+            yield return new object[] { "file.TXT", new List<string> { ".TXT" }, true };
+
+            yield return new object[] { "file.txt", new List<string> { "png", "jpg", "txt" }, true };
+
+            yield return new object[] { "file.txt", new List<string> { "png", "jpg" }, false };
+
+            yield return new object[] { "file.txt", new List<string> { }, false };
+
+            yield return new object[] { "file.txt", new List<string> { "tx" }, false };
+
+            yield return new object[] { "file.txt", new List<string> { ".tx" }, false };
+
+            yield return new object[] { "file.txt", new List<string> { "t", "x", "t" }, false };
+
+            yield return new object[] { "file.png.txt", new List<string> { "txt" }, true };
+
+            yield return new object[] { "file.png.txt", new List<string> { ".txt" }, true };
+
+            yield return new object[] { "file.png.txt", new List<string> { "png" }, false };
+
+            yield return new object[] { @"C:\dir\file.txt", new List<string> { ".txt" }, true };
+        }
+
+        [Theory]
+        [MemberData(nameof(GetPathsToTestHasExtension))]
+        public void HasExtension_CorrectOutput(string path, IEnumerable<string> extensions, bool expectedResult) {
+            var result = PathUtils.HasExtension(path, extensions);
+
+            Assert.Equal(expectedResult, result);
+        }
     }
 }

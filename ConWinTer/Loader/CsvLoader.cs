@@ -1,4 +1,5 @@
 ﻿using ConWinTer.Model;
+using ConWinTer.Utils;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -28,6 +29,14 @@ namespace ConWinTer.Loader {
             }
 
             return new Table(data);
+        }
+
+        public IEnumerable<string> GetSupportedExtensions() {
+            return new List<string> { ".csv" };
+        }
+
+        public bool IsSupportedFile(string path) {
+            return PathUtils.HasExtension(path, GetSupportedExtensions());
         }
     }
 }

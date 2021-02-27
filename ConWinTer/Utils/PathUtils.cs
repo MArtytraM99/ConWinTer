@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using System.Linq;
 using System.Text;
 
 namespace ConWinTer.Utils {
@@ -24,6 +26,35 @@ namespace ConWinTer.Utils {
             var extension = Path.GetExtension(path);
             var newFilename = $"{filenameWOExt}{stringToAppend}{extension}";
             return Path.Combine(Path.Combine(Path.GetDirectoryName(path), newFilename));
+        }
+
+        /// <summary>
+        /// Determines if <paramref name="path"/> has extension defined in <paramref name="extensions"/>
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="extensions"></param>
+        /// <returns></returns>
+        public static bool HasExtension(string path, IEnumerable<string> extensions) {
+            var extension = Path.GetExtension(path);
+            return extensions.Contains(extension, new ExtensionComparer());
+        }
+
+        private class ExtensionComparer : IEqualityComparer<string> {
+            public bool Equals([AllowNull] string x, [AllowNull] string y) {
+                if (x == null && y == null)
+                    return true;
+                if (x != null && y == null)
+                    return true;
+                if (x == null && y != null)
+                    return true;
+                var trimmedX = x.Trim().Trim('.');
+                var trimmedY = y.Trim().Trim('.');
+                return trimmedX.Equals(trimmedY, StringComparison.InvariantCultureIgnoreCase);
+            }
+
+            public int GetHashCode([DisallowNull] string obj) {
+                return obj.GetHashCode();
+            }
         }
     }
 }
