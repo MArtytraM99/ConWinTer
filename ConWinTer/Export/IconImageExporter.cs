@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ConWinTer.Utils;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
@@ -93,8 +94,7 @@ namespace ConWinTer.Export {
         }
 
         public bool IsSupportedFile(string path) {
-            var extension = Path.GetExtension(path);
-            return GetSupportedExtensions().Contains(extension);
+            return PathUtils.HasExtension(path, GetSupportedExtensions());
         }
     }
 }

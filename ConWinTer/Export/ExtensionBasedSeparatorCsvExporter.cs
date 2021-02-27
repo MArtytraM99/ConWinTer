@@ -1,4 +1,5 @@
 ﻿using ConWinTer.Model;
+using ConWinTer.Utils;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -36,8 +37,7 @@ namespace ConWinTer.Export {
         }
 
         public bool IsSupportedFile(string path) {
-            var extension = Path.GetExtension(path);
-            return GetSupportedExtensions().Contains(extension);
+            return PathUtils.HasExtension(path, GetSupportedExtensions());
         }
 
         public IEnumerable<string> GetSupportedExtensions() {

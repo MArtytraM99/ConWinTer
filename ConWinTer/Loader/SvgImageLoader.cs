@@ -1,4 +1,5 @@
-﻿using Svg;
+﻿using ConWinTer.Utils;
+using Svg;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
