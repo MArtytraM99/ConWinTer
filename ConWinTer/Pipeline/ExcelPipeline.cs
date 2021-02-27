@@ -7,7 +7,7 @@ using System.IO;
 using System.Text;
 
 namespace ConWinTer.Pipeline {
-    public class ExcelPipeline {
+    public class ExcelPipeline : ConversionPipelineBase {
         private readonly IExcelLoader loader;
         private readonly ITableExporter tableExporter;
 
@@ -15,7 +15,7 @@ namespace ConWinTer.Pipeline {
             this.loader = loader;
             this.tableExporter = tableExporter;
         }
-        public void Run(string input, string output, string outputFormat) {
+        public override void Run(string input, string output, string outputFormat) {
             if (!File.Exists(input))
                 throw new ArgumentException($"Input file in path '{input}' doesn't exist.");
 
@@ -36,24 +36,6 @@ namespace ConWinTer.Pipeline {
                 var toAppend = string.IsNullOrEmpty(table.Name) ? "" : $"_{table.Name}";
                 var tableOutputPath = PathUtils.AppendToFilename(outputPath, toAppend);
                 tableExporter.Export(table, tableOutputPath);
-            }
-        }
-
-        private string GetOutputPath(string input, string output, string outputFormat) {
-            if (string.IsNullOrEmpty(output))
-                return Path.ChangeExtension(input, outputFormat);
-            if (!string.IsNullOrEmpty(outputFormat))
-                return Path.ChangeExtension(output, outputFormat);
-            return output;
-        }
-
-        public int RunWithExceptionHandling(string input, string output, string outputFormat) {
-            try {
-                Run(input, output, outputFormat);
-                return 0;
-            } catch (Exception e) {
-                Console.Error.WriteLine(e.Message);
-                return 1;
             }
         }
     }

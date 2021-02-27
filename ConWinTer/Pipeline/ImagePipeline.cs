@@ -6,7 +6,7 @@ using System.IO;
 using System.Text;
 
 namespace ConWinTer.Pipeline {
-    public class ImagePipeline {
+    public class ImagePipeline : ConversionPipelineBase {
         private readonly IImageLoader loader;
         private readonly IImageExporter exporter;
 
@@ -15,7 +15,7 @@ namespace ConWinTer.Pipeline {
             this.exporter = exporter;
         }
 
-        public void Run(string input, string output, string outputFormat) {
+        public override void Run(string input, string output, string outputFormat) {
             if (!File.Exists(input))
                 throw new ArgumentException($"Input file in path '{input}' doesn't exist.");
 
@@ -34,24 +34,6 @@ namespace ConWinTer.Pipeline {
             var image = loader.FromFile(input);
 
             exporter.Export(image, outputPath);
-        }
-
-        private string GetOutputPath(string input, string output, string outputFormat) {
-            if (string.IsNullOrEmpty(output))
-                return Path.ChangeExtension(input, outputFormat);
-            if (!string.IsNullOrEmpty(outputFormat))
-                return Path.ChangeExtension(output, outputFormat);
-            return output;
-        }
-
-        public int RunWithExceptionHandling(string input, string output, string outputFormat) {
-            try {
-                Run(input, output, outputFormat);
-                return 0;
-            } catch (Exception e) {
-                Console.Error.WriteLine(e.Message);
-                return 1;
-            }
         }
     }
 }
