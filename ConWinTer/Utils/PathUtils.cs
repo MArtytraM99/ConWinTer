@@ -58,5 +58,25 @@ namespace ConWinTer.Utils {
                 return trimmed.GetHashCode();
             }
         }
+
+        private static readonly Dictionary<string, ImageFormat> extensionImageFormatMap = new Dictionary<string, ImageFormat>(new ExtensionComparer()) {
+            { "bmp", ImageFormat.Bmp },
+            { "dib", ImageFormat.Bmp },
+            { "gif", ImageFormat.Gif },
+            { "jpg", ImageFormat.Jpeg },
+            { "jpeg", ImageFormat.Jpeg },
+            { "png", ImageFormat.Png },
+            { "tif", ImageFormat.Tiff },
+            { "tiff", ImageFormat.Tiff },
+        };
+
+        public static System.Drawing.Imaging.ImageFormat GetImageFormat(string path) {
+            string extension = Path.GetExtension(path);
+
+            if (!extensionImageFormatMap.TryGetValue(extension, out ImageFormat imageFormat))
+                throw new ArgumentException("Path does not have a valid image extension.");
+
+            return imageFormat;
+        }
     }
 }

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Drawing.Imaging;
 using Xunit;
 
 namespace ConWinTer.UnitTests {
@@ -87,6 +88,36 @@ namespace ConWinTer.UnitTests {
             var result = PathUtils.HasExtension(path, extensions);
 
             Assert.Equal(expectedResult, result);
+        }
+
+        public static IEnumerable<object[]> GetPathToTestGetImageFormat() {
+            yield return new object[] { "image.bmp", ImageFormat.Bmp };
+            yield return new object[] { "image.dib", ImageFormat.Bmp };
+            yield return new object[] { "image.gif", ImageFormat.Gif };
+            yield return new object[] { "image.jpg", ImageFormat.Jpeg };
+            yield return new object[] { "image.jpeg", ImageFormat.Jpeg };
+            yield return new object[] { "image.png", ImageFormat.Png };
+            yield return new object[] { "image.tif", ImageFormat.Tiff };
+            yield return new object[] { "image.tiff", ImageFormat.Tiff };
+        }
+
+        [Theory]
+        [MemberData(nameof(GetPathToTestGetImageFormat))]
+        public void GetImageFormat_DecodesFormat(string path, ImageFormat imageFormat) {
+            var result = PathUtils.GetImageFormat(path);
+
+            Assert.Equal(imageFormat, result);
+        }
+
+        public static IEnumerable<object[]> GetPathToTestGetImageFormatThrows() {
+            yield return new object[] { "image" };
+            yield return new object[] { "file.txt" };
+        }
+
+        [Theory]
+        [MemberData(nameof(GetPathToTestGetImageFormatThrows))]
+        public void GetImageFormat_Throws(string path) {
+            Assert.Throws<ArgumentException>(() => PathUtils.GetImageFormat(path));
         }
     }
 }

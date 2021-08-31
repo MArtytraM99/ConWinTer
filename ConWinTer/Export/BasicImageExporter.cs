@@ -11,7 +11,8 @@ namespace ConWinTer.Export {
         public void Export(Image image, string path) {
             if (string.IsNullOrEmpty(path))
                 throw new ArgumentException("Path cannot be empty");
-            image.Save(path);
+            var imageFormat = PathUtils.GetImageFormat(path);
+            image.Save(path, imageFormat);
         }
 
         public IEnumerable<string> GetSupportedExtensions() {
