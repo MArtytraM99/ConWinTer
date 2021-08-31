@@ -4,6 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Drawing.Imaging;
 
 namespace ConWinTer.Utils {
     public static class PathUtils {
@@ -53,7 +54,8 @@ namespace ConWinTer.Utils {
             }
 
             public int GetHashCode([DisallowNull] string obj) {
-                return obj.GetHashCode();
+                var trimmed = obj.Trim().Trim('.');
+                return trimmed.GetHashCode();
             }
         }
     }
