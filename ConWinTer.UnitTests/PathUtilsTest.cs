@@ -61,6 +61,8 @@ namespace ConWinTer.UnitTests {
 
             yield return new object[] { "file.TXT", new List<string> { ".TXT" }, true };
 
+            yield return new object[] { "file.TXT", new List<string> { ".txt" }, true };
+
             yield return new object[] { "file.txt", new List<string> { "png", "jpg", "txt" }, true };
 
             yield return new object[] { "file.txt", new List<string> { "png", "jpg" }, false };

@@ -40,14 +40,14 @@ namespace ConWinTer.Utils {
             return extensions.Contains(extension, new ExtensionComparer());
         }
 
-        private class ExtensionComparer : IEqualityComparer<string> {
+        public class ExtensionComparer : IEqualityComparer<string> {
             public bool Equals([AllowNull] string x, [AllowNull] string y) {
                 if (x == null && y == null)
                     return true;
                 if (x != null && y == null)
-                    return true;
+                    return false;
                 if (x == null && y != null)
-                    return true;
+                    return false;
                 var trimmedX = x.Trim().Trim('.');
                 var trimmedY = y.Trim().Trim('.');
                 return trimmedX.Equals(trimmedY, StringComparison.InvariantCultureIgnoreCase);
@@ -55,7 +55,7 @@ namespace ConWinTer.Utils {
 
             public int GetHashCode([DisallowNull] string obj) {
                 var trimmed = obj.Trim().Trim('.');
-                return trimmed.GetHashCode();
+                return trimmed.ToLowerInvariant().GetHashCode();
             }
         }
 
