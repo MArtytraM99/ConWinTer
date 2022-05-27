@@ -7,10 +7,10 @@ using System.Text;
 
 namespace ConWinTer.Loader {
     public class CompositeImageLoader : IImageLoader {
-        private Dictionary<string, IImageLoader> extensionLoaderMap;
+        private readonly Dictionary<string, IImageLoader> extensionLoaderMap;
 
         public CompositeImageLoader() {
-            extensionLoaderMap = new Dictionary<string, IImageLoader>();
+            extensionLoaderMap = new Dictionary<string, IImageLoader>(new PathUtils.ExtensionComparer());
         }
 
         /// <summary>
