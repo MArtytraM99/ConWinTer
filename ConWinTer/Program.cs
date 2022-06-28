@@ -3,6 +3,7 @@ using ConWinTer.Loader;
 using ConWinTer.Pipeline;
 using ConWinTer.Utils;
 using System;
+using System.Collections.Generic;
 using System.CommandLine;
 using System.CommandLine.Invocation;
 using System.CommandLine.Parsing;
@@ -16,6 +17,7 @@ namespace ConWinTer {
     class Program {
         private static ImagePipeline imagePipeline;
         private static ExcelPipeline excelPipeline;
+        private static MergePDFsPipeline mergePDFsPipeline;
         static async Task<int> Main(string[] args) {
             Configure();
             var rootCommand = ConfigureCommandLineOptions();
@@ -38,6 +40,8 @@ namespace ConWinTer {
             imagePipeline = new ImagePipeline(compositeLoader, compositeExporter);
 
             excelPipeline = new ExcelPipeline(new ClosedXMLExcelLoader(), new ExtensionBasedSeparatorCsvExporter());
+
+            mergePDFsPipeline = new MergePDFsPipeline();
         }
 
         private static RootCommand ConfigureCommandLineOptions() {
@@ -71,9 +75,17 @@ namespace ConWinTer {
             excelCommand.AddOption(outputFormatOpt);
             excelCommand.Handler = CommandHandler.Create<string, string, string>(excelPipeline.RunWithExceptionHandling);
 
+            var mergePdfsCommand = new Command("merge_pdfs", "Command for merging PDFs");
+            var pdfsInputOption = new Option<List<string>>(new string[] { "--input", "-i" }, "Path to input pdfs");
+            pdfsInputOption.AllowMultipleArgumentsPerToken = true;
+            mergePdfsCommand.AddOption(pdfsInputOption);
+            mergePdfsCommand.AddOption(outputPathOpt);
+            mergePdfsCommand.Handler = CommandHandler.Create<List<string>, string>(mergePDFsPipeline.RunWithExceptionHandling);
+
             rootCommand.TreatUnmatchedTokensAsErrors = true;
             rootCommand.AddCommand(imageCommand);
             rootCommand.AddCommand(excelCommand);
+            rootCommand.AddCommand(mergePdfsCommand);
 
             return rootCommand;
         }
