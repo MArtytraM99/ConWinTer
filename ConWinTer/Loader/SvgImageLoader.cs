@@ -27,8 +27,8 @@ namespace ConWinTer.Loader {
 
         private void processNodes(IEnumerable<SvgElement> nodes, SvgPaintServer colorServer) {
             foreach (var node in nodes) {
+                if (!node.ContainsAttribute("stroke") && !node.ContainsAttribute("fill")) node.Stroke = colorServer;  // explicitely setting stroke when fill is set creates weird artifacts along edges of layered shapes
                 if (!node.ContainsAttribute("fill")) node.Fill = colorServer;
-                if (!node.ContainsAttribute("stroke")) node.Stroke = node.Fill;  // use node.Fill color if it `fill` is set and `stroke` is not
                 if (!node.ContainsAttribute("color")) node.Color = colorServer;
 
                 processNodes(node.Descendants(), colorServer);
